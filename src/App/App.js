@@ -1,26 +1,95 @@
-// eslint-disable-next-line no-unused-vars
 import React from "react";
 import propTypes from "prop-types";
 
-const App = ({ numberErrors, timerMinutes }) => {
-	return (
-		<section className="welcome">
-			<div className="welcome__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83" /></div>
-			<button className="welcome__button"><span className="visually-hidden">Начать игру</span></button>
-			<h2 className="welcome__rules-title">Правила игры</h2>
-			<p className="welcome__text">Правила просты:</p>
-			<ul className="welcome__rules-list">
-				<li>За {timerMinutes} минут нужно ответить на все вопросы.</li>
-				<li>Можно допустить {numberErrors} ошибки.</li>
-			</ul>
-			<p className="welcome__text">Удачи!</p>
-		</section>
-	);
-};
+import Welcome from "../components/Welcome/Welcome";
+import GameArtist from "../components/GameArtist/GameArtist";
+import GameGenre from "../components/GameGenre/GameGenre";
+
+export default class App extends React.Component {
+	static defaultProps = {
+		numberErrors: 4,
+		timerMinutes: 6,
+	}
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			counter: -1,
+			numberErrors: this.props.numberErrors,
+			timerMinutes: this.props.timerMinutes,
+		};
+	}
+
+	increment = () => {
+		const { counter } = this.state;
+		const { questions } = this.props;
+
+		const newCounter = counter < questions.length - 1 ? counter + 1 : -1;
+
+		this.setState({ counter: newCounter})
+
+	}
+
+	render() {
+		const  { questions	} = this.props;
+
+		const {
+			counter,
+			numberErrors,
+			timerMinutes,
+		} = this.state;
+
+		if (counter < 0) {
+			return (
+				<div>
+					<Welcome
+						numberErrors={numberErrors}
+						timerMinutes={timerMinutes}
+						nextQuestion={this.increment}
+					/>
+				</div>
+			);
+		}
+
+		const {
+			type,
+			title,
+			rightAnswer,
+			possibleErrors,
+			timeline,
+			answers,
+		} = questions[counter];
+
+		if (type === "genre") {
+			return (
+				<GameGenre
+					type={type}
+					title={title}
+					rightAnswer={rightAnswer}
+					possibleErrors={possibleErrors}
+					timeline={timeline}
+					answers={answers}
+					increment={this.increment}
+				/>
+			);
+		}
+
+		return (
+			<GameArtist
+				type={type}
+				title={title}
+				rightAnswer={rightAnswer}
+				possibleErrors={possibleErrors}
+				timeline={timeline}
+				answers={answers}
+				increment={this.increment}
+			/>
+		);
+	}
+}
 
 App.propTypes = {
 	numberErrors: propTypes.number,
 	timerMinutes: propTypes.number,
 };
 
-export default App;
