@@ -14,7 +14,7 @@ export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			counter: -1,
+			counter: 0,
 			numberErrors: this.props.numberErrors,
 			timerMinutes: this.props.timerMinutes,
 		};

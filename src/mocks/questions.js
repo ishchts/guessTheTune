@@ -3,15 +3,15 @@ export const questions = [
 		type: "genre",
 		title: "Выберите инди-рок треки",
 		question: "Угадайте Жанр",
-		rightAnswer: "rock",
+		rightAnswer: "pop-music",
 		answers: [
 			{
-				src: "song",
-				genre: "rap",
+				src: "sounds/Typan-luna-doesnot-know-the-way.mp3",
+				genre: "pop-music",
 			},
 			{
-				src: "song",
-				genre: "rock",
+				src: "sounds/boom-box-janitors.mp3",
+				genre: "rap",
 			}
 		],
 	},
