@@ -5,6 +5,10 @@ import classNames from 'classnames';
 
 
 export default class Audio extends Component {
+  static defaultProps = {
+    isPlayning: false,
+  }
+
   constructor(props) {
     super(props);
     this.audioRef = React.createRef();
@@ -12,28 +16,26 @@ export default class Audio extends Component {
       isLoading: false,
       isError: false,
       isSuccess: false,
-      isPlayning: false,
       progress: 0,
     }
   }
 
   componentDidMount() {
-    const audio = this.audioRef.current.querySelector('audio');
+
   }
 
   componentDidUpdate() {
-    const audio = this.audioRef.current.querySelector('audio');
-    const { isPlayning } = this.state;
+    const {
+      isPlayning
+    } = this.props;
 
     if (isPlayning) {
-      return audio.play();
+      this.audioRef.current.play();
     }
 
     if (!isPlayning) {
-      this.audioRef.current.classList.remove('js-current');
-      return audio.pause();
+      this.audioRef.current.pause();
     }
-
 
     return null;
   }
@@ -42,16 +44,11 @@ export default class Audio extends Component {
     console.log('componentWillUnmount')
   }
 
-  startPlay = (e) => {
-    e.preventDefault();
-    this.setState({
-      isPlayning: !this.state.isPlayning,
-    })
-  }
-
   render() {
-    const { src, genre } = this.props;
-    const { isPlayning } = this.state;
+    const {
+      src,
+      isPlayning
+    } = this.props;
 
     const playBtnClass = classNames({
       'track__button': true,
@@ -60,10 +57,10 @@ export default class Audio extends Component {
     });
 
     return (
-      <div className="track js-track" ref={this.audioRef}>
-        <button onClick={this.startPlay} className={playBtnClass} type="button"></button>
+      <div className="track">
+        <button onClick={this.props.startTrack} className={playBtnClass} type="button"></button>
         <div className="track__status">
-          <audio src={src} />
+          <audio src={src} ref={this.audioRef} />
         </div>
       </div>
 

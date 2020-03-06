@@ -8,6 +8,7 @@ class GameGenre extends Component {
 		super(props);
 		this.audio = React.createRef();
 		this.state = {
+			activeTrack: -1,
 			progress: 0,
 			isLoading: false,
 			isPlayning: false,
@@ -30,32 +31,39 @@ class GameGenre extends Component {
 		this._audio.ontimeupdate = () => this.setState({
 			progress: this._audio.currentTime
 		});
-
-
 	}
 
-	componentDidUpdate() {
 
-	}
-
-	componentDidMount() {
-
-	}
-
-	handlePlayClick = () => {
-		this.setState({ isPlayning: !this.state.isPlayning })
-	}
+	startTrack = (index) => {
+		const {
+			activeTrack
+		} = this.state;
+		const trackStatus = activeTrack === index ? -1 : index;
+		this.setState({ activeTrack: trackStatus });
+	};
 
 	renderTracks = () => {
 		const {
 			answers,
 		} = this.props;
 
+		const {
+			activeTrack
+		} = this.state;
+
 		const [first, second] = answers;
 		return (
 			<div>
-					<Audio src={first.src} />
-					<Audio src={second.src} />
+					<Audio
+						src={first.src}
+						isPlayning={0 === activeTrack}
+						startTrack={() => this.startTrack(0)}
+					/>
+					<Audio
+						src={second.src}
+						isPlayning={1 === activeTrack}
+						startTrack={() => this.startTrack(1)}
+					/>
 			</div>
 		)
 
