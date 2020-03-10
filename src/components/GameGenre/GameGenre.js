@@ -6,31 +6,9 @@ import Audio from "../Audio/Audio";
 class GameGenre extends Component {
 	constructor(props) {
 		super(props);
-		this.audio = React.createRef();
 		this.state = {
 			activeTrack: -1,
-			progress: 0,
-			isLoading: false,
-			isPlayning: false,
 		};
-
-		this._audio = new Audio("sounds/boom-box-janitors.mp3");
-
-		this._audio.oncanplaythrough = () => this.setState({
-			isLoading: true,
-		});
-
-		this._audio.onplay = () => this.setState({
-			isPlayning: true,
-		});
-
-		this._audio.onpause = () => this.setState({
-			isPlayning: false,
-		});
-
-		this._audio.ontimeupdate = () => this.setState({
-			progress: this._audio.currentTime
-		});
 	}
 
 
@@ -51,74 +29,20 @@ class GameGenre extends Component {
 			activeTrack
 		} = this.state;
 
-		const [first, second] = answers;
-		return (
-			<div>
-					<Audio
-						src={first.src}
-						isPlayning={0 === activeTrack}
-						startTrack={() => this.startTrack(0)}
-					/>
-					<Audio
-						src={second.src}
-						isPlayning={1 === activeTrack}
-						startTrack={() => this.startTrack(1)}
-					/>
-			</div>
-		)
-
-		return (
-			<div>
-				<div className="track">
-					<button className="track__button track__button--play" type="button"></button>
-					<div className="track__status">
-						<audio></audio>
-					</div>
-					<div className="game__answer">
-						<input className="game__input visually-hidden" type="checkbox" name="answer" value="answer-1"
-													id="answer-1" />
-						<label className="game__check" htmlFor="answer-1">Отметить</label>
-					</div>
-				</div>
-
-				<div className="track">
-					<button className="track__button track__button--play" type="button"></button>
-					<div className="track__status">
-						<audio></audio>
-					</div>
-					<div className="game__answer">
-						<input className="game__input visually-hidden" type="checkbox" name="answer" value="answer-1"
-													id="answer-2" />
-						<label className="game__check" htmlFor="answer-2">Отметить</label>
-					</div>
-				</div>
-
-				<div className="track">
-					<button className="track__button track__button--pause" type="button"></button>
-					<div className="track__status">
-						<audio></audio>
-					</div>
-					<div className="game__answer">
-						<input className="game__input visually-hidden" type="checkbox" name="answer" value="answer-1"
-													id="answer-3" />
-						<label className="game__check" htmlFor="answer-3">Отметить</label>
-					</div>
-				</div>
-
-				<div className="track">
-					<button className="track__button track__button--play" type="button"></button>
-					<div className="track__status">
-						<audio></audio>
-					</div>
-					<div className="game__answer">
-						<input className="game__input visually-hidden" type="checkbox" name="answer" value="answer-1"
-													id="answer-4" />
-						<label className="game__check" htmlFor="answer-4">Отметить</label>
-					</div>
+		return answers.map((el, index) => (
+			<div className="track" key={index}>
+						<Audio
+							src={el.src}
+							isPlayning={index === activeTrack}
+							startTrack={() => this.startTrack(index)}
+						/>
+				<div className="game__answer">
+					<input className="game__input visually-hidden" type="checkbox" name="answer" value={`answer-${index}`}
+												id={`answer-${index}`} />
+					<label className="game__check" htmlFor={`answer-${index}`}>Отметить</label>
 				</div>
 			</div>
-		)
-
+		));
 	}
 
 	render () {

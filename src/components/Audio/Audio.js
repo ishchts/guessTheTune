@@ -25,9 +25,7 @@ export default class Audio extends Component {
   }
 
   componentDidUpdate() {
-    const {
-      isPlayning
-    } = this.props;
+    const { isPlayning } = this.props;
 
     if (isPlayning) {
       this.audioRef.current.play();
@@ -37,17 +35,18 @@ export default class Audio extends Component {
       this.audioRef.current.pause();
     }
 
-    return null;
-  }
+    this.audioRef.current.oncanplaythrough = () => this.setState({
+      isLoading: true,
+    });
 
-  componentWillUnmount() {
-    console.log('componentWillUnmount')
+    return null;
   }
 
   render() {
     const {
       src,
-      isPlayning
+      isPlayning,
+      startTrack,
     } = this.props;
 
     const playBtnClass = classNames({
@@ -57,13 +56,12 @@ export default class Audio extends Component {
     });
 
     return (
-      <div className="track">
-        <button onClick={this.props.startTrack} className={playBtnClass} type="button"></button>
+      <>
+        <button onClick={startTrack} className={playBtnClass} type="button"></button>
         <div className="track__status">
           <audio src={src} ref={this.audioRef} />
         </div>
-      </div>
-
+      </>
     )
   }
 
@@ -71,4 +69,6 @@ export default class Audio extends Component {
 
 Audio.propTypes = {
   isLoading: propTypes.bool,
+  startTrack: propTypes.func,
+  progress: propTypes.number,
 };
