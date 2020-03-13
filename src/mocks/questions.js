@@ -12,14 +12,20 @@ export const questions = [
 			{
 				src: "sounds/boom-box-janitors.mp3",
 				genre: "rap",
-			}
+			},
+			{
+				src: "sounds/Typan-luna-doesnot-know-the-way.mp3",
+				genre: "pop-music",
+			},
 		],
 	},
-	
-	
 	{
 		type: "artist",
 		title: "Угадайте Артиста",
+		question: {
+				src: "sounds/Typan-luna-doesnot-know-the-way.mp3",
+				genre: "pop-music",
+		},
 		rightAnswer: "bi2",
 		answers: [
 			{
@@ -33,14 +39,6 @@ export const questions = [
 		],
 	}
 ];
-
-
-export const gameSettings = {
-	possibleErrors: 2,
-	timeline: 5,
-};
-
-
 
 
 

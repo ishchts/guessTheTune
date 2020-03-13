@@ -6,11 +6,6 @@ import GameArtist from "../components/GameArtist/GameArtist";
 import GameGenre from "../components/GameGenre/GameGenre";
 
 export default class App extends React.Component {
-	static defaultProps = {
-		numberErrors: 4,
-		timerMinutes: 6,
-	}
-
 	constructor(props) {
 		super(props);
 		this.state = {

@@ -18,9 +18,10 @@ describe('Audio component', () => {
     />);
 
     expect(wrapper.find('button.track__button--play').length).toBe(1);
-    wrapper.find('button').simulate('click');
-  });
 
+    wrapper.find('button').simulate('click');
+
+  });
 
   it ('play audio', () => {
     const wrapper = shallow(<Audio

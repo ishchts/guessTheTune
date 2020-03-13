@@ -1,23 +1,19 @@
 import React  from "react";
 import { render } from "react-dom";
+import { Provider } from 'react-redux'
+
+import store from './redux/store';
 import App from "./App/App";
 
-import { questions, gameSettings } from "./mocks/questions";
+const initApplication = (
+	<Provider store={store} >
+		<App />
+	</Provider>
+)
 
-const init = (questions, gameSettings) => {
-	const {
-		possibleErrors,
-		timeline,
-	} = gameSettings;
 
-	return (
-		render(<App questions={questions} numberErrors={possibleErrors} timerMinutes={timeline} />, document.getElementById("root"))
-	);
-};
+render(initApplication, document.getElementById('root'));
 
-init(
-	questions,
-	gameSettings
-);
+
 
 
