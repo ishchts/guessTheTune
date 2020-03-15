@@ -1,7 +1,7 @@
 export const questions = [
 	{
 		type: "genre",
-		title: "Выберите инди-рок треки",
+		title: "Выберите поп треки",
 		question: "Угадайте Жанр",
 		rightAnswer: "pop-music",
 		answers: [

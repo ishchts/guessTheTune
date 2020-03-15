@@ -1,17 +1,15 @@
 import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
 
-const initialState = {
-  mistakes: 3,
-  timeInMinutes: 5,
-};
 
-const gameRules = (state = initialState, action) => {
-  return state
-}
+import gameRules from './modules/gameRules/reducer';
+import questions from "./modules/questions/reducer";
 
 
 const rootReducer = combineReducers({
-  gameRules
+  gameRules,
+  questions,
+  form: formReducer
 });
 
 export default rootReducer

@@ -15,8 +15,6 @@ class Welcome extends Component {
 			startPlay,
 		} = this.props;
 
-		console.log(this.props);
-
 		return (
 			<section className="welcome">
 				<div className="welcome__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83" /></div>
