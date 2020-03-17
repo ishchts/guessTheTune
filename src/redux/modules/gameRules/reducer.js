@@ -2,7 +2,7 @@ import types from './types';
 
 const initialState = {
   mistakes: 3,
-  numberOfErrors: 0,
+  userOfErrors: 0,
   timeInMinutes: 5,
   currentQuestion: -1,
 };
@@ -11,7 +11,7 @@ const gameRules = (state = initialState, action) => {
 
   switch (action.type) {
 
-    case types.QUESTIONS_NEXT :
+    case types.STEP_NEXT :
       const {
         currentQuestion,
       } = state;
@@ -24,21 +24,31 @@ const gameRules = (state = initialState, action) => {
     case types.GENGE_USER_ANSWER:
       const {
         payload: {
-          replaceNumber,
+          userAnaswer,
           rightAnswer,
           answers
         }
       } = action;
 
-      const checkAnswers = replaceNumber.every((el) => {
-        return answers[el].genre === rightAnswer
+      const countRightAnswer = answers.reduce((acc, el) => (
+        el.genre === rightAnswer ? acc + 1 : acc
+      ), 0);
+
+      const mapRightAnswer = userAnaswer.map((el) => {
+        if (answers[el].genre === rightAnswer) {
+          return true;
+        }
+        return false;
       });
 
-      const hasError = checkAnswers ? 0 : 1;
+      const isEveryRight = mapRightAnswer.every(el => el);
+
+      const notError = isEveryRight && mapRightAnswer.length === countRightAnswer;
+      const userOfErrors = notError ? state.userOfErrors :  state.userOfErrors + 1
 
       return {
         ...state,
-        numberOfErrors: state.numberOfErrors + hasError,
+        userOfErrors,
       }
 
     case types.QUESTIONS_RESET :

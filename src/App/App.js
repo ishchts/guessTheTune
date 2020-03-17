@@ -2,31 +2,30 @@ import React from "react";
 import propTypes from "prop-types";
 import { connect } from 'react-redux';
 
-
-import { nextQuestion } from "../redux/modules/gameRules/actions/nextQuestion";
-import { resetQuestion } from "../redux/modules/gameRules/actions/resetQuestion";
-import { gengeUserAnswer } from "../redux/modules/gameRules/actions/gengeUserAnswer";
+import { stepNext } from "../redux/modules/gameRules/actions/stepNext";
 import { mistakesCheckFinish } from "../redux/modules/gameRules/actions/gengeUserAnswer";
 
 import Welcome from "../components/Welcome/Welcome";
 import GameArtist from "../components/GameArtist/GameArtist";
 import GameGenre from "../components/GameGenre/GameGenre";
+import FailTries from "../components/FailTries/FailTries";
 
 const mapStateTopProps = (state) => {
 	const {
 		gameRules : {
 			currentQuestion,
 			mistakes,
+			userOfErrors,
 			timeInMinutes,
 		},
-		questions,
 	} = state;
 
 	return {
 		currentQuestion,
 		mistakes,
 		timeInMinutes,
-		questions: questions,
+		userOfErrors,
+		questions: state.questions
 	};
 };
 
@@ -38,15 +37,9 @@ class App extends React.Component {
 	questionIncrement = () => {
 		const {
 			dispatch,
-			currentQuestion,
-			questions
 		} = this.props;
 
-		if (currentQuestion === questions.length - 1) {
-			return dispatch(resetQuestion())
-		}
-
-		return dispatch(nextQuestion())
+		return dispatch(stepNext())
 	}
 
 	gengeUserAnswer = (values) => {
@@ -70,11 +63,11 @@ class App extends React.Component {
 			currentQuestion,
 			mistakes,
 			timeInMinutes,
+			userOfErrors,
 			questions
 		} = this.props;
 
-
-		if (!questions[currentQuestion]) {
+		if (currentQuestion < 0) {
 			return (
 				<div>
 					<Welcome
@@ -84,6 +77,10 @@ class App extends React.Component {
 					/>
 				</div>
 			);
+		}
+		
+		if (userOfErrors > mistakes) {
+			return <FailTries />
 		}
 
 		const {
@@ -127,8 +124,6 @@ class App extends React.Component {
 		}
 
 		return <div>213</div>
-
-
 	}
 }
 

@@ -1,8 +1,8 @@
 import types from "../types";
 
-export const nextQuestion = (props) => {
+export const stepNext = (props) => {
   return {
-    type: types.QUESTIONS_NEXT,
+    type: types.STEP_NEXT,
     payload: { ...props },
   }
 }

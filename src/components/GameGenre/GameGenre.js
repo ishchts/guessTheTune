@@ -1,16 +1,36 @@
 import React, { Component } from "react";
 import propTypes from "prop-types";
+import debounce  from 'lodash/debounce';
 
+import { connect } from 'react-redux';
 
+import { gengeUserAnswer } from "../../redux/modules/gameRules/actions/gengeUserAnswer";
+import { stepNext } from "../../redux/modules/gameRules/actions/stepNext";
 import FormGenge from "./FormGenge";
 import Header from "./../Header/Header";
 
+
 class GameGenre extends Component {
+	static propTypes = {
+		type: propTypes.string,
+		title: propTypes.string,
+		rightAnswer: propTypes.string,
+		answers: propTypes.arrayOf(
+			propTypes.shape({
+				src: propTypes.string,
+				genge: propTypes.string,
+			})
+		)
+	}
+
 	constructor(props) {
 		super(props);
 		this.state = {
 			activeTrack: -1,
 		};
+		this.debounceNextStep = debounce(() => {
+			this.props.dispatch(stepNext())
+		}, 1000);
 	}
 
 	validate = (values) => {
@@ -32,8 +52,7 @@ class GameGenre extends Component {
 		const {
 			answers,
 			rightAnswer,
-			gengeUserAnswer,
-
+			dispatch
 		} = this.props;
 
 		const currentAnswer = Object.keys(values).filter(el => values[el]);
@@ -42,16 +61,17 @@ class GameGenre extends Component {
 			return null
 		}
 
-
-		const replaceNumber = currentAnswer.map(str => {
+		const userAnaswer = currentAnswer.map(str => {
 			return parseInt(str.replace(/[^0-9]/gim,''), 10)
 		});
 
-		gengeUserAnswer({
-			replaceNumber,
+		dispatch(gengeUserAnswer({
+			userAnaswer,
 			answers,
 			rightAnswer,
-		});
+		}));
+
+		this.debounceNextStep()
 	}
 
 	startTrack = (index) => {
@@ -88,19 +108,10 @@ class GameGenre extends Component {
 			</section>
 		);
 	};
-	}
+}
 
+const mapStateToProps = (state) => {
+	return state;
+}
 
-GameGenre.propTypes = {
-	type: propTypes.string,
-	title: propTypes.string,
-	rightAnswer: propTypes.string,
-	answers: propTypes.arrayOf(
-		propTypes.shape({
-			src: propTypes.string,
-			genge: propTypes.string,
-		})
-	)
-};
-
-export default GameGenre;
+export default connect(mapStateToProps)(GameGenre);

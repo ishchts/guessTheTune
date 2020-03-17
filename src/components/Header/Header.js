@@ -6,19 +6,19 @@ import Mistakes from './../Mistakes/Mistakes';
 const mapStateToProps = (state) => {
   const {
     gameRules: {
-      numberOfErrors
+      userOfErrors
     }
   } = state;
 
   return {
-    numberOfErrors
+    userOfErrors
   }
 }
 
 class Header extends Component {
   render() {
     const {
-      numberOfErrors
+      userOfErrors
     } = this.props;
 
     return (
@@ -42,7 +42,7 @@ class Header extends Component {
           <span className="timer__dots">:</span>
           <span className="timer__secs">00</span>
         </div>
-        <Mistakes numberOfErrors={numberOfErrors} />
+        <Mistakes userOfErrors={userOfErrors} />
       </header>
     )
   }

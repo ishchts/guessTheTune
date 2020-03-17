@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import propTypes from "prop-types";
 
+import Header from "./../Header/Header";
+
 const GameArtist = (props) => {
 	const { increment } = props;
 	return (
 		<section id="game-artist" className="game game--artist">
-
-
+			<Header />
 			<section className="game__screen">
 				<h2 className="game__title">Кто исполняет эту песню?</h2>
 				<div className="game__track">
