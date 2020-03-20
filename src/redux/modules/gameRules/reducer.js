@@ -10,8 +10,9 @@ const initialState = {
 const gameRules = (state = initialState, action) => {
 
   switch (action.type) {
-
     case types.STEP_NEXT :
+      console.log(action);
+      console.log('action');
       const {
         currentQuestion,
       } = state;

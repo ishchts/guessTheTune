@@ -30,6 +30,11 @@ const mapStateTopProps = (state) => {
 };
 
 class App extends React.Component {
+	static propTypes = {
+		numberErrors: propTypes.number,
+		timerMinutes: propTypes.number,
+	};
+
 	constructor(props) {
 		super(props);
 	}
@@ -126,11 +131,6 @@ class App extends React.Component {
 		return <div>213</div>
 	}
 }
-
-App.propTypes = {
-	numberErrors: propTypes.number,
-	timerMinutes: propTypes.number,
-};
 
 export default connect(mapStateTopProps)(App);
 
