@@ -2,24 +2,28 @@ import types from './types';
 
 const initialState = {
   mistakes: 3,
+  currentQuestion: 0,
   userOfErrors: 0,
-  timeInMinutes: 5,
-  currentQuestion: -1,
+  timeInMinutes: 2,
+  timeInSeconds: 300,
 };
 
 const gameRules = (state = initialState, action) => {
-
   switch (action.type) {
     case types.STEP_NEXT :
-      console.log(action);
-      console.log('action');
       const {
         currentQuestion,
       } = state;
+      const {
+        payload: {
+          questionsLength,
+        }
+      } = action;
 
+      const nextStep = currentQuestion >= (questionsLength - 1) ? -1 : currentQuestion + 1;
       return {
         ...state,
-        currentQuestion: currentQuestion + 1,
+        currentQuestion: nextStep,
       }
 
     case types.GENGE_USER_ANSWER:

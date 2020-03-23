@@ -15,5 +15,8 @@ const Mistakes = ({userOfErrors}) => {
   )
 };
 
+Mistakes.propTypes = {
+  userOfErrors: propTypes.number,
+}
 
 export default Mistakes
