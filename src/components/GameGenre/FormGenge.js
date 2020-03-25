@@ -49,19 +49,20 @@ class FormGenge extends Component {
   }
 
   render() {
+
     const {
       handleSubmit,
       syncErrors: {
         notSelect
       },
-      anyTouched,
     } = this.props;
+
+
 
     return (
       <form onSubmit={handleSubmit} className="game__tracks">
         {this.renderTracks()}
-        {notSelect && anyTouched && <p>выбирете минимум одно композицию</p>}
-        <button type="submit" className="game__submit button">Ответить</button>
+        <button disabled={notSelect} type="submit" className="game__submit button">Ответить</button>
       </form>
     )
   }

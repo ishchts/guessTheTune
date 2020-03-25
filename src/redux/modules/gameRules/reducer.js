@@ -2,10 +2,11 @@ import types from './types';
 
 const initialState = {
   mistakes: 3,
-  currentQuestion: 0,
+  currentQuestion: -1,
   userOfErrors: 0,
-  timeInMinutes: 2,
+  timeInMinutes: 5,
   timeInSeconds: 300,
+  isFailTime: false,
 };
 
 const gameRules = (state = initialState, action) => {
@@ -20,7 +21,7 @@ const gameRules = (state = initialState, action) => {
         }
       } = action;
 
-      const nextStep = currentQuestion >= (questionsLength - 1) ? -1 : currentQuestion + 1;
+      const nextStep = currentQuestion >= (questionsLength - 1) ? 0 : currentQuestion + 1;
       return {
         ...state,
         currentQuestion: nextStep,
@@ -62,6 +63,34 @@ const gameRules = (state = initialState, action) => {
         currentQuestion: action.payload
       }
 
+    case types.GAME_TIMER:
+      const {
+        timeInSeconds
+      } = state;
+
+      return {
+        ...state,
+        timeInSeconds: timeInSeconds -1,
+      };
+
+    case types.END_TIME:
+      const {
+        payload: {
+          id
+        }
+      } = action;
+
+      clearInterval(id);
+
+      return {
+        ...state,
+        isFailTime: true,
+      };
+
+    case types.GAME_RESET:
+      return {
+        ...initialState
+      }
 
     default:
       return state

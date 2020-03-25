@@ -8,6 +8,7 @@ const GameArtist = (props) => {
 	return (
 		<section id="game-artist" className="game game--artist">
 			<Header />
+
 			<section className="game__screen">
 				<h2 className="game__title">Кто исполняет эту песню?</h2>
 				<div className="game__track">

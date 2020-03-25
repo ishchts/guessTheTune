@@ -11,7 +11,6 @@ const initApplication = (
 	</Provider>
 )
 
-
 render(initApplication, document.getElementById('root'));
 
 

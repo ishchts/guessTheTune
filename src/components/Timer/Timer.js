@@ -1,46 +1,48 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import propTypes from 'prop-types';
+
+import { gameTimer } from '../../redux/modules/gameRules/actions/gameTimer';
+import { endTime } from '../../redux/modules/gameRules/actions/endTime';
+
 
 class Timer extends Component {
+  static defaultProps = {
+    timeInSeconds: propTypes.number,
+  }
+
   constructor(props) {
     super(props);
-    this.state = {
-      timeInSeconds: this.props.timeInSeconds
-    }
     this.timerId = null;
   }
 
   componentDidMount() {
-    this.timerId = setInterval(this.tick(123), 100)
-  }
-
-  componentDidUpdate() {
-
+    this.timerId = setInterval(this.tick(), 1000)
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount')
+    clearInterval(this.timerId);
   }
 
-  tick = (cb) => () => {
+  tick = () => () => {
     const {
-      timeInSeconds
-    } = this.state;
+      timeInSeconds,
+    } = this.props;
 
-    this.setState({
-      timeInSeconds: this.state.timeInSeconds - 1
-    })
+    if (timeInSeconds <= 0) {
+      return this.props.dispatch(endTime(this.timerId));
+    }
+
+    return this.props.dispatch(gameTimer());
   }
 
   render() {
     const {
-      timeInSeconds
-    } = this.state;
-
+      timeInSeconds,
+    } = this.props;
 
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = `${timeInSeconds - minutes * 60}`.length === 1 ? `0${timeInSeconds - minutes * 60}`: timeInSeconds - minutes * 60;
-
     const proportion = timeInSeconds / 300;
     const stroke = Math.round(2 * Math.PI * 370);
     const offset = stroke - (stroke * proportion);

@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 
 import { stepNext } from "../redux/modules/gameRules/actions/stepNext";
 import { mistakesCheckFinish } from "../redux/modules/gameRules/actions/gengeUserAnswer";
+import { gameReset } from "../redux/modules/gameRules/actions/gameReset";
 
 import Welcome from "../components/Welcome/Welcome";
 import GameArtist from "../components/GameArtist/GameArtist";
 import GameGenre from "../components/GameGenre/GameGenre";
 import FailTries from "../components/FailTries/FailTries";
+import FailTime from "../components/FailTime/FailTime";
 
 const mapStateTopProps = (state) => {
 	const {
@@ -17,6 +19,7 @@ const mapStateTopProps = (state) => {
 			mistakes,
 			userOfErrors,
 			timeInMinutes,
+			isFailTime,
 		},
 	} = state;
 
@@ -25,6 +28,7 @@ const mapStateTopProps = (state) => {
 		mistakes,
 		timeInMinutes,
 		userOfErrors,
+		isFailTime,
 		questions: state.questions
 	};
 };
@@ -69,6 +73,7 @@ class App extends React.Component {
 			mistakes,
 			timeInMinutes,
 			userOfErrors,
+			isFailTime,
 			questions
 		} = this.props;
 
@@ -85,7 +90,15 @@ class App extends React.Component {
 		}
 		
 		if (userOfErrors > mistakes) {
-			return <FailTries />
+			return <FailTries handleRepeatClick={() => this.props.dispatch(gameReset())} />
+		}
+
+		if (isFailTime) {
+			return (
+					<FailTime
+						hadnleClick={() => this.props.dispatch(gameReset())}
+					/>
+			)
 		}
 
 		const {

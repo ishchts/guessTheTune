@@ -30,7 +30,7 @@ class GameGenre extends Component {
 		};
 		this.debounceNextStep = debounce(() => {
 			this.props.dispatch(stepNext())
-		}, 1000);
+		}, 500);
 	}
 
 	validate = (values) => {
@@ -71,7 +71,7 @@ class GameGenre extends Component {
 			rightAnswer,
 		}));
 
-		this.debounceNextStep()
+		this.debounceNextStep();
 	}
 
 	startTrack = (index) => {
