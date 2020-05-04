@@ -12,7 +12,9 @@ import GameGenre from "../components/GameGenre/GameGenre";
 import FailTries from "../components/FailTries/FailTries";
 import FailTime from "../components/FailTime/FailTime";
 
-const mapStateTopProps = (state) => {
+
+
+const mapStateToProps = (state) => {
 	const {
 		gameRules : {
 			currentQuestion,
@@ -33,7 +35,8 @@ const mapStateTopProps = (state) => {
 	};
 };
 
-class App extends React.Component {
+@connect(mapStateToProps)
+export default class App extends React.Component {
 	static propTypes = {
 		numberErrors: propTypes.number,
 		timerMinutes: propTypes.number,
@@ -79,25 +82,25 @@ class App extends React.Component {
 
 		if (currentQuestion < 0) {
 			return (
-				<div>
-					<Welcome
-						mistakes={mistakes}
-						timeInMinutes={timeInMinutes}
-						startPlay={this.questionIncrement}
-					/>
-				</div>
+				<Welcome
+					mistakes={mistakes}
+					timeInMinutes={timeInMinutes}
+					startPlay={this.questionIncrement}
+				/>
 			);
 		}
 		
 		if (userOfErrors > mistakes) {
-			return <FailTries handleRepeatClick={() => this.props.dispatch(gameReset())} />
+			return (
+				<FailTries handleRepeatClick={() => this.props.dispatch(gameReset())} />
+			)
 		}
 
 		if (isFailTime) {
 			return (
-					<FailTime
-						hadnleClick={() => this.props.dispatch(gameReset())}
-					/>
+				<FailTime
+					hadnleClick={() => this.props.dispatch(gameReset())}
+				/>
 			)
 		}
 
@@ -141,9 +144,6 @@ class App extends React.Component {
 			);
 		}
 
-		return <div>213</div>
+		return null;
 	}
-}
-
-export default connect(mapStateTopProps)(App);
-
+};

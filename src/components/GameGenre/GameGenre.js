@@ -9,8 +9,12 @@ import { stepNext } from "../../redux/modules/gameRules/actions/stepNext";
 import FormGenge from "./FormGenge";
 import Header from "./../Header/Header";
 
+const mapStateToProps = (state) => {
+	return state;
+}
 
-class GameGenre extends Component {
+@connect(mapStateToProps)
+export default class GameGenre extends Component {
 	static propTypes = {
 		type: propTypes.string,
 		title: propTypes.string,
@@ -108,10 +112,4 @@ class GameGenre extends Component {
 			</section>
 		);
 	};
-}
-
-const mapStateToProps = (state) => {
-	return state;
-}
-
-export default connect(mapStateToProps)(GameGenre);
+};

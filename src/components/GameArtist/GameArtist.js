@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import propTypes from "prop-types";
+import React, { Component } from 'react';
+import propTypes from 'prop-types';
 
-import Header from "./../Header/Header";
+import Header from './../Header/Header';
 
 const GameArtist = (props) => {
 	const { increment } = props;

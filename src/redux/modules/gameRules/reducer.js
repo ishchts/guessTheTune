@@ -1,101 +1,102 @@
 import types from './types';
 
 const initialState = {
-  mistakes: 3,
-  currentQuestion: -1,
-  userOfErrors: 0,
-  timeInMinutes: 5,
-  timeInSeconds: 300,
-  isFailTime: false,
+	mistakes: 3,
+	currentQuestion: -1,
+	userOfErrors: 0,
+	timeInMinutes: 5,
+	timeInSeconds: 300,
+	isFailTime: false,
 };
 
 const gameRules = (state = initialState, action) => {
-  switch (action.type) {
-    case types.STEP_NEXT :
-      const {
-        currentQuestion,
-      } = state;
-      const {
-        payload: {
-          questionsLength,
-        }
-      } = action;
+	switch (action.type) {
+	case types.STEP_NEXT :
+		const { 
+			currentQuestion
+		} = state;
 
-      const nextStep = currentQuestion >= (questionsLength - 1) ? 0 : currentQuestion + 1;
-      return {
-        ...state,
-        currentQuestion: nextStep,
-      }
+		const {
+			payload: {
+				questionsLength,
+			}
+		} = action;
 
-    case types.GENGE_USER_ANSWER:
-      const {
-        payload: {
-          userAnaswer,
-          rightAnswer,
-          answers
-        }
-      } = action;
+		const nextStep = currentQuestion >= (questionsLength - 1) ? 0 : currentQuestion + 1;
+		return {
+			...state,
+			currentQuestion: nextStep,
+		};
 
-      const countRightAnswer = answers.reduce((acc, el) => (
-        el.genre === rightAnswer ? acc + 1 : acc
-      ), 0);
+	case types.GENGE_USER_ANSWER:
+		const {
+			payload: {
+				userAnaswer,
+				rightAnswer,
+				answers
+			}
+		} = action;
 
-      const mapRightAnswer = userAnaswer.map((el) => {
-        if (answers[el].genre === rightAnswer) {
-          return true;
-        }
-        return false;
-      });
+		const countRightAnswer = answers.reduce((acc, el) => (
+			el.genre === rightAnswer ? acc + 1 : acc
+		), 0);
 
-      const isEveryRight = mapRightAnswer.every(el => el);
+		const mapRightAnswer = userAnaswer.map((el) => {
+			if (answers[el].genre === rightAnswer) {
+				return true;
+			}
+			return false;
+		});
 
-      const notError = isEveryRight && mapRightAnswer.length === countRightAnswer;
-      const userOfErrors = notError ? state.userOfErrors :  state.userOfErrors + 1
+		const isEveryRight = mapRightAnswer.every(el => el);
 
-      return {
-        ...state,
-        userOfErrors,
-      }
+		const notError = isEveryRight && mapRightAnswer.length === countRightAnswer;
+		const userOfErrors = notError ? state.userOfErrors :  state.userOfErrors + 1;
 
-    case types.QUESTIONS_RESET :
-      return {
-        ...state,
-        currentQuestion: action.payload
-      }
+		return {
+			...state,
+			userOfErrors,
+		};
 
-    case types.GAME_TIMER:
-      const {
-        timeInSeconds
-      } = state;
+	case types.QUESTIONS_RESET :
+		return {
+			...state,
+			currentQuestion: action.payload
+		};
 
-      return {
-        ...state,
-        timeInSeconds: timeInSeconds -1,
-      };
+	case types.GAME_TIMER:
+		const {
+			timeInSeconds
+		} = state;
 
-    case types.END_TIME:
-      const {
-        payload: {
-          id
-        }
-      } = action;
+		return {
+			...state,
+			timeInSeconds: timeInSeconds -1,
+		};
 
-      clearInterval(id);
+	case types.END_TIME:
+		const {
+			payload: {
+				id
+			}
+		} = action;
 
-      return {
-        ...state,
-        isFailTime: true,
-      };
+		clearInterval(id);
 
-    case types.GAME_RESET:
-      return {
-        ...initialState
-      }
+		return {
+			...state,
+			isFailTime: true,
+		};
 
-    default:
-      return state
+	case types.GAME_RESET:
+		return {
+			...initialState
+		};
 
-  }
-}
+	default:
+		return state;
+
+	}
+};
 
 export default gameRules;

@@ -1,5 +1,5 @@
-import types from "../types";
+import types from '../types';
 
 export const gameReset = () => ({
-  type: types.GAME_RESET,
-})
+	type: types.GAME_RESET,
+});
