@@ -9,16 +9,43 @@ import { stepNext } from "../../redux/modules/gameRules/actions/stepNext";
 import FormGenge from "./FormGenge";
 import Header from "./../Header/Header";
 
+const genreTitle = {
+	electronic: 'Выберите все треки electronic',
+	alternative: 'Выберите все треки alternative',
+	reggae: 'Выберите все треки reggae',
+	country: 'Выберите все треки country',
+};
+
 const mapStateToProps = (state) => {
-	return state;
+	const {
+		gameRules: {
+			currentQuestion: index
+		},
+		questions: {
+			data
+		}
+	} = state;
+
+
+	const {
+		genre,
+		answers,
+	} = data[index];
+
+	const title = genreTitle[genre];
+
+	return {
+		answers,
+		title,
+		genre,
+	};
 }
 
 @connect(mapStateToProps)
 export default class GameGenre extends Component {
 	static propTypes = {
-		type: propTypes.string,
 		title: propTypes.string,
-		rightAnswer: propTypes.string,
+		genre: propTypes.string.isRequired,
 		answers: propTypes.arrayOf(
 			propTypes.shape({
 				src: propTypes.string,
@@ -37,45 +64,20 @@ export default class GameGenre extends Component {
 		}, 500);
 	}
 
-	validate = (values) => {
-		const errors = {};
-		const emptyObjectLength = 0;
-
-		const mapCurrentCheckbox = Object.keys(values).filter(el => values[el]);
-
-		if (mapCurrentCheckbox.length === emptyObjectLength) {
-			errors.notSelect = true
-		} else {
-			errors.notSelect = false
-		}
-
-		return errors;
-	}
-
-	hadnleSubmit = values => {
+	hadnleSubmit = (values) => {
 		const {
 			answers,
-			rightAnswer,
+			genre,
 			dispatch
 		} = this.props;
 
-		const currentAnswer = Object.keys(values).filter(el => values[el]);
-
-		if (currentAnswer.length === 0) {
-			return null
-		}
-
-		const userAnaswer = currentAnswer.map(str => {
-			return parseInt(str.replace(/[^0-9]/gim,''), 10)
-		});
-
 		dispatch(gengeUserAnswer({
-			userAnaswer,
+			userAnswer: values,
 			answers,
-			rightAnswer,
+			rightGenre: genre,
 		}));
-
 		this.debounceNextStep();
+		return;
 	}
 
 	startTrack = (index) => {
@@ -92,10 +94,11 @@ export default class GameGenre extends Component {
 			title,
 			answers,
 		} = this.props;
+
 		const {
 			activeTrack
 		} = this.state;
-		console.log(this.props);
+
 		return (
 			<section id="game-genre" className="game game--genre">
 				<Header />
@@ -103,7 +106,6 @@ export default class GameGenre extends Component {
 					<h2 className="game__title">{title}</h2>
 					<FormGenge
 						onSubmit={this.hadnleSubmit}
-						validate={this.validate}
 						answers={answers}
 						activeTrack={activeTrack}
 						startTrack={this.startTrack}

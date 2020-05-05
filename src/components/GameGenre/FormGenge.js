@@ -1,25 +1,14 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from 'redux-form';
-import { connect } from 'react-redux';
 
-import Audio from "../Audio/Audio";
+import Audio from "../Audio";
 
-const mapStateToProps = (state) => {
-  const {
-    form: {
-      formGenge: {
-        syncErrors
-      }
-    }
-  } = state;
+import formNames from '../../constants/form';
 
-  return {
-    syncErrors
-  }
-
-}
-
-class FormGenge extends Component {
+@reduxForm({
+  form: formNames.formGenge,
+})
+export default class FormGenge extends Component {
   renderTracks = () => {
     const {
       answers,
@@ -49,31 +38,17 @@ class FormGenge extends Component {
   }
 
   render() {
-
     const {
       handleSubmit,
-      syncErrors: {
-        notSelect
-      },
+      pristine,
+      submitting,
     } = this.props;
-
-
 
     return (
       <form onSubmit={handleSubmit} className="game__tracks">
         {this.renderTracks()}
-        <button disabled={notSelect} type="submit" className="game__submit button">Ответить</button>
+        <button disabled={pristine || submitting} type="submit" className="game__submit button">Ответить</button>
       </form>
     )
   }
-}
-
-const connectProps = connect(mapStateToProps)(FormGenge)
-
-export default reduxForm({
-  form: 'formGenge',
-})(connectProps);
-
-
-
-
+};

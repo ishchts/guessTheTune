@@ -44,7 +44,7 @@ export const questions = [
 */
 
 
-export const questions = [
+const questions = [
     {
        "type":"genre",
        "genre":"electronic",
@@ -261,6 +261,8 @@ export const questions = [
           }
        ]
     }
- ]
+];
+
+export default questions;
 
 

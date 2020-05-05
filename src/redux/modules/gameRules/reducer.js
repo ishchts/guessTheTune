@@ -2,7 +2,7 @@ import types from './types';
 
 const initialState = {
 	mistakes: 3,
-	currentQuestion: 1,
+	currentQuestion: -1,
 	userOfErrors: 0,
 	timeInMinutes: 5,
 	timeInSeconds: 300,
@@ -11,96 +11,117 @@ const initialState = {
 
 const gameRules = (state = initialState, action) => {
 	switch (action.type) {
-	case types.STEP_NEXT :
-		const { 
-			currentQuestion
-		} = state;
+		case types.STEP_NEXT : {
+			const { 
+				currentQuestion
+			} = state;
 
-		const {
-			payload: {
-				questionsLength,
-			}
-		} = action;
+			const {
+				payload: {
+					questionsLength,
+				}
+			} = action;
 
-		const nextStep = currentQuestion >= (questionsLength - 1) ? 0 : currentQuestion + 1;
-		return {
-			...state,
-			currentQuestion: nextStep,
-		};
+			const nextStep = currentQuestion >= (questionsLength - 1) ? 0 : currentQuestion + 1;
+			return {
+				...state,
+				currentQuestion: nextStep,
+			};
+		}
 
-	case types.GENGE_USER_ANSWER:
-		const {
-			payload: {
-				userAnaswer,
-				rightAnswer,
-				answers
-			}
-		} = action;
+		case types.GENGE_USER_ANSWER: {
+			const {
+				payload: {
+					answers,
+					rightGenre,
+					userAnswer,
+				}
+			} = action;
 
-		const countRightAnswer = answers.reduce((acc, el) => (
-			el.genre === rightAnswer ? acc + 1 : acc
-		), 0);
+			const allRightAnswers = answers.filter(item => item.genre === rightGenre);
 
-		const mapRightAnswer = userAnaswer.map((el) => {
-			if (answers[el].genre === rightAnswer) {
-				return true;
-			}
-			return false;
-		});
+			const allUserAnswer = Object.keys(userAnswer)
+				.filter(el => userAnswer[el])
+				.map(str => {
+					const responseIndex = parseInt(str.replace(/[^0-9]/gim,''), 10);
+					return answers[responseIndex];
+				});
 
-		const isEveryRight = mapRightAnswer.every(el => el);
+			const everyRight = allUserAnswer.every(item => item.genre === rightGenre);
+			const isLengthEqual = allRightAnswers.length === allUserAnswer.length;
 
-		const notError = isEveryRight && mapRightAnswer.length === countRightAnswer;
-		const userOfErrors = notError ? state.userOfErrors :  state.userOfErrors + 1;
+			const userOfErrors = everyRight && isLengthEqual ? state.userOfErrors :  state.userOfErrors + 1;
 
-		return {
-			...state,
-			userOfErrors,
-		};
+			return {
+				...state,
+				userOfErrors,
+			};
+		}
+		case types.ARTIST_USER_ANSWER: {
+			const {
+				payload: {
+					userAnswer,
+					answers,
+					rightArtist
+				}
+			} = action;
 
-	case types.QUESTIONS_RESET :
-		return {
-			...state,
-			currentQuestion: action.payload
-		};
+			const responseIndex = parseInt(userAnswer.replace(/[^0-9]/gim,''), 10);
+			const {
+				artist
+			} = answers[responseIndex];
 
-	case types.GAME_TIMER:
-		const {
-			timeInSeconds
-		} = state;
+			const userOfErrors = artist === rightArtist ? state.userOfErrors :  state.userOfErrors + 1;
 
-		return {
-			...state,
-			timeInSeconds: timeInSeconds -1,
-		};
+			return {
+				...state,
+				userOfErrors,
+			};
+		}
 
-	case types.END_TIME:
-		const {
-			payload: {
-				id
-			}
-		} = action;
+		case types.QUESTIONS_RESET : {
+			return {
+				...state,
+				currentQuestion: action.payload
+			};
+		}
 
-		clearInterval(id);
+		case types.GAME_TIMER: {
+			const {
+				timeInSeconds
+			} = state;
 
-		return {
-			...state,
-			isFailTime: true,
-		};
+			return {
+				...state,
+				timeInSeconds: timeInSeconds -1,
+			};
+		}
 
-	case types.GAME_RESET:
-		return {
-			...initialState
-		};
+		case types.END_TIME: {
+			const {
+				payload: {
+					id
+				}
+			} = action;
 
-	case types.ARTIST_USER_ANSWER:
-		console.log(123)
-		return {
-			state
-		};
+			clearInterval(id);
 
-	default:
-		return state;
+			return {
+				...state,
+				isFailTime: true,
+			};
+		}
+
+		case types.GAME_RESET: {
+			return {
+				...initialState
+			};
+
+		}
+
+		default: {
+			return state;
+		}
 
 	}
 };

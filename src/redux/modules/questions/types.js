@@ -1,3 +1,6 @@
 export default {
-
+    GET_QUESTION_FETCH: 'questions/GET_QUESTION_FETCH',
+    GET_QUESTION_SUCCESS: 'questions/GET_QUESTION_SUCCESS',
+    GET_QUESTION_FAIL:  'questions/GET_QUESTION_FAIL',
+    GET_QUESTION_RESET: 'questions/GET_QUESTION_RESET',
 };
