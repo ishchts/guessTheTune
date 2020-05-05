@@ -5,6 +5,7 @@ import Header from './../Header/Header';
 
 const GameArtist = (props) => {
 	const { increment } = props;
+	console.log(props);
 	return (
 		<section id="game-artist" className="game game--artist">
 			<Header />

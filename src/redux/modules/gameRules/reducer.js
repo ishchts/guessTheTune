@@ -2,7 +2,7 @@ import types from './types';
 
 const initialState = {
 	mistakes: 3,
-	currentQuestion: -1,
+	currentQuestion: 1,
 	userOfErrors: 0,
 	timeInMinutes: 5,
 	timeInSeconds: 300,
@@ -91,6 +91,12 @@ const gameRules = (state = initialState, action) => {
 	case types.GAME_RESET:
 		return {
 			...initialState
+		};
+
+	case types.ARTIST_USER_ANSWER:
+		console.log(123)
+		return {
+			state
 		};
 
 	default:

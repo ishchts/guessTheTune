@@ -1,11 +1,11 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-const Mistakes = ({userOfErrors}) => {
+const Mistakes = ({ userOfErrors }) => {
 	let wrongItem = [];
 
 	for (let i = 0; i < userOfErrors; i++) {
-		wrongItem = [...wrongItem, <div className="wrong"></div>,];
+		wrongItem = [...wrongItem, <div key={i} className="wrong"></div>,];
 	}
 
 	return (

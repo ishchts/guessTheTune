@@ -6,11 +6,11 @@ import { stepNext } from "../redux/modules/gameRules/actions/stepNext";
 import { mistakesCheckFinish } from "../redux/modules/gameRules/actions/gengeUserAnswer";
 import { gameReset } from "../redux/modules/gameRules/actions/gameReset";
 
-import Welcome from "../components/Welcome/Welcome";
-import GameArtist from "../components/GameArtist/GameArtist";
-import GameGenre from "../components/GameGenre/GameGenre";
-import FailTries from "../components/FailTries/FailTries";
-import FailTime from "../components/FailTime/FailTime";
+import Welcome from "../components/Welcome";
+import GameArtist from "../components/GameArtist";
+import GameGenre from "../components/GameGenre";
+import FailTries from "../components/FailTries";
+import FailTime from "../components/FailTime";
 
 
 

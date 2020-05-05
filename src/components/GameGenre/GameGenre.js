@@ -95,7 +95,7 @@ export default class GameGenre extends Component {
 		const {
 			activeTrack
 		} = this.state;
-
+		console.log(this.props);
 		return (
 			<section id="game-genre" className="game game--genre">
 				<Header />
