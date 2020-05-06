@@ -1,18 +1,20 @@
 import React from "react";
 import propTypes from "prop-types";
 import { connect } from 'react-redux';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 import { stepNext } from "../redux/modules/gameRules/actions/stepNext";
 import { mistakesCheckFinish } from "../redux/modules/gameRules/actions/gengeUserAnswer";
 import { gameReset } from "../redux/modules/gameRules/actions/gameReset";
+import { getQuestions } from '../redux/modules/questions/actions/getQuestions';
 
-import Welcome from "../components/Welcome/Welcome";
-import GameArtist from "../components/GameArtist/GameArtist";
-import GameGenre from "../components/GameGenre/GameGenre";
-import FailTries from "../components/FailTries/FailTries";
-import FailTime from "../components/FailTime/FailTime";
+import Welcome from "../components/Welcome";
+import GameArtist from "../components/GameArtist";
+import GameGenre from "../components/GameGenre";
+import FailTries from "../components/FailTries";
+import FailTime from "../components/FailTime";
 
-
+import { AppRoute } from '../routes';
 
 const mapStateToProps = (state) => {
 	const {
@@ -35,6 +37,7 @@ const mapStateToProps = (state) => {
 	};
 };
 
+@withRouter
 @connect(mapStateToProps)
 export default class App extends React.Component {
 	static propTypes = {
@@ -44,6 +47,33 @@ export default class App extends React.Component {
 
 	constructor(props) {
 		super(props);
+	}
+
+	componentDidMount() {
+		const {
+			dispatch
+		} = this.props;
+		return dispatch(getQuestions());
+	}
+
+	componentDidUpdate() {
+		const {
+			mistakes,
+			userOfErrors,
+			isFailTime,
+			history,
+			location: {
+				pathname
+			}
+		} = this.props;
+
+		if (userOfErrors > mistakes && pathname !== AppRoute.LOSE) {
+			return history.push(AppRoute.LOSE);
+		}
+
+		if (isFailTime && pathname !== AppRoute.FAILTIME) {
+			return history.push(AppRoute.FAILTIME);
+		}
 	}
 
 	questionIncrement = () => {
@@ -70,15 +100,32 @@ export default class App extends React.Component {
 		return dispatch(mistakesCheckFinish())
 	}
 
-	render() {
+	renderGame = () => {
 		const {
 			currentQuestion,
 			mistakes,
 			timeInMinutes,
 			userOfErrors,
 			isFailTime,
-			questions
+			questions: {
+				loading: loadingQuestion,
+				success,
+				error,
+				data: listQuestion
+			},
+			history
 		} = this.props;
+
+		if (error) {
+			return <div>Ошибка, обновите страницу</div>
+		}
+		
+		if (loadingQuestion) {
+			return (
+				<div>Загрузка...</div>
+			)
+		}
+
 
 		if (currentQuestion < 0) {
 			return (
@@ -89,61 +136,40 @@ export default class App extends React.Component {
 				/>
 			);
 		}
-		
-		if (userOfErrors > mistakes) {
-			return (
-				<FailTries handleRepeatClick={() => this.props.dispatch(gameReset())} />
-			)
-		}
 
-		if (isFailTime) {
-			return (
-				<FailTime
-					hadnleClick={() => this.props.dispatch(gameReset())}
-				/>
-			)
-		}
-
-		const {
-			type,
-			title,
-			rightAnswer,
-			possibleErrors,
-			timeline,
-			answers,
-		} = questions[currentQuestion] ;
+		const { type } = listQuestion[currentQuestion];
 
 		if (type === "genre") {
 			return (
-				<GameGenre
-					type={type}
-					title={title}
-					rightAnswer={rightAnswer}
-					possibleErrors={possibleErrors}
-					timeline={timeline}
-					answers={answers}
-					increment={this.questionIncrement}
-					gengeUserAnswer={this.gengeUserAnswer}
-					currentQuestion={currentQuestion}
-					mistakesCheckFinish={this.mistakesCheckFinish}
-				/>
+				<GameGenre />
 			);
 		}
 
 		if (type === 'artist') {
-			return (
-				<GameArtist
-					type={type}
-					title={title}
-					rightAnswer={rightAnswer}
-					possibleErrors={possibleErrors}
-					timeline={timeline}
-					answers={answers}
-					increment={this.questionIncrement}
-				/>
+			return ( <GameArtist />
 			);
 		}
 
 		return null;
+	}
+
+	render() {
+		return (
+			<Switch>
+				<Route exact path={AppRoute.ROOT} >
+					{this.renderGame()}
+				</Route>
+				<Route exact path="/auth">
+					<div>auth</div>
+				</Route>
+				<Route exact path={AppRoute.LOSE}>
+					<FailTries handleRepeatClick={() => this.props.dispatch(gameReset())} />
+				</Route>
+				<Route path={AppRoute.FAILTIME}>
+					<FailTime hadnleClick={() => this.props.dispatch(gameReset())} />
+				</Route>
+			</Switch>
+		)
+		
 	}
 };

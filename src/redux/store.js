@@ -1,7 +1,6 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 
 import rootReducer from './rootReducer';
-
 
 const logger = (store) => next => action => {
 	const {dispatch, getState} = store;
@@ -12,7 +11,13 @@ const logger = (store) => next => action => {
 	return next(action);
 };
 
-const store = createStore(rootReducer, applyMiddleware(logger));
+const store = createStore(
+	rootReducer,
+	compose(
+		applyMiddleware(logger),
+		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+	)
+);
 
 export default store;
 

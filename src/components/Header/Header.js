@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Mistakes from './../Mistakes/Mistakes';
-import Timer from './../Timer/Timer';
+import Mistakes from './../Mistakes';
+import Timer from './../Timer';
 
 const mapStateToProps = (state) => {
 	const {
@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
 	};
 };
 
-class Header extends Component {
+@connect(mapStateToProps)
+export default class Header extends Component {
 	render() {
 		const {
 			userOfErrors
@@ -33,6 +34,4 @@ class Header extends Component {
 			</header>
 		);
 	}
-}
-
-export default connect(mapStateToProps)(Header);
+};
