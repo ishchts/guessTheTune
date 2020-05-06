@@ -14,9 +14,7 @@ export const getQuestions = () => async (dispatch, getState) => {
                 payload: mockQuestions
             });
             return Promise.resolve(mockQuestions);
-        }, 1000)
-
-
+        }, 1000);
 
     } catch(e) {
         dispatch({

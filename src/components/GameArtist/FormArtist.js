@@ -8,12 +8,6 @@ import formNames from '../../constants/form';
 	form: formNames.artistForm,
 })
 export default class FormArtist extends Component {
-    componentDidUpdate() {
-        const {
-            handleSubmit
-        } = this.props;
-    }
-
     handleChange = (e) => {
         this.props.onSubmit({ answer: e.target.value });
     }

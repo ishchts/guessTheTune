@@ -64,7 +64,8 @@ export default class GameGenre extends Component {
 		}, 500);
 	}
 
-	hadnleSubmit = (values) => {
+	hadnleSubmit = (values, state, props) => {
+		props.reset();
 		const {
 			answers,
 			genre,
