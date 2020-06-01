@@ -9,7 +9,7 @@
       "jsx": "react",
       "allowSyntheticDefaultImports": true,
       "lib": ["dom"],
-      "noEmit": false,
+      "noEmit": false
     },
     "exclude": [
       "node_modules",

@@ -5,6 +5,7 @@
         "es6": true,
         "node": true
     },
+    "experimentalDecorators": true,
     "extends" : [
         "eslint:recommended",
         "plugin:react/recommended"
@@ -19,7 +20,6 @@
     "plugins": [
         "react"
     ],
-    "experimentalDecorators": true,
     "rules": {
         "indent": [
             "error",

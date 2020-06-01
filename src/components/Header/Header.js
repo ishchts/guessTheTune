@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Mistakes from './../Mistakes';
+import Mistakes from '../Mistakes/Mistakes';
 import Timer from './../Timer';
 
 const mapStateToProps = (state) => {
